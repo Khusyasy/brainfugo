@@ -31,9 +31,21 @@ func main() {
 	run(tokens)
 }
 
+
+type TokenType int
+const (
+	TK_RIGHT TokenType = iota
+	TK_LEFT
+	TK_INCREMENT
+	TK_DECREMENT
+	TK_LOOP_START
+	TK_LOOP_END
+	TK_OUTPUT
+	TK_INPUT
+)
+
 type Token struct {
-	Type  string
-	Value string
+	Type TokenType
 }
 
 func lexer(input []string) []Token {
@@ -41,21 +53,21 @@ func lexer(input []string) []Token {
 	for _, v := range input {
 		switch v {
 		case ">":
-			res = append(res, Token{Type: "RIGHT"})
+			res = append(res, Token{Type: TK_RIGHT})
 		case "<":
-			res = append(res, Token{Type: "LEFT"})
+			res = append(res, Token{Type: TK_LEFT})
 		case "+":
-			res = append(res, Token{Type: "INCREMENT"})
+			res = append(res, Token{Type: TK_INCREMENT})
 		case "-":
-			res = append(res, Token{Type: "DECREMENT"})
+			res = append(res, Token{Type: TK_DECREMENT})
 		case "[":
-			res = append(res, Token{Type: "LOOP_START"})
+			res = append(res, Token{Type: TK_LOOP_START})
 		case "]":
-			res = append(res, Token{Type: "LOOP_END"})
+			res = append(res, Token{Type: TK_LOOP_END})
 		case ".":
-			res = append(res, Token{Type: "OUTPUT"})
+			res = append(res, Token{Type: TK_OUTPUT})
 		case ",":
-			res = append(res, Token{Type: "INPUT"})
+			res = append(res, Token{Type: TK_INPUT})
 		}
 	}
 	return res
@@ -69,26 +81,26 @@ func run(tokens []Token) {
 	for i := 0; i < len(tokens); {
 		curr := tokens[i]
 		switch curr.Type {
-		case "RIGHT":
+		case TK_RIGHT:
 			pointer++
 			i++
-		case "LEFT":
+		case TK_LEFT:
 			pointer--
 			i++
-		case "INCREMENT":
+		case TK_INCREMENT:
 			tape[pointer]++
 			i++
-		case "DECREMENT":
+		case TK_DECREMENT:
 			tape[pointer]--
 			i++
-		case "LOOP_START":
+		case TK_LOOP_START:
 			if tape[pointer] == 0 {
 				paren++
 				for {
 					i++
-					if tokens[i].Type == "LOOP_START" {
+					if tokens[i].Type == TK_LOOP_START {
 						paren++
-					} else if tokens[i].Type == "LOOP_END" {
+					} else if tokens[i].Type == TK_LOOP_END {
 						paren--
 					}
 					if paren == 0 {
@@ -98,14 +110,14 @@ func run(tokens []Token) {
 			} else {
 				i++
 			}
-		case "LOOP_END":
+		case TK_LOOP_END:
 			if tape[pointer] != 0 {
 				paren--
 				for {
 					i--
-					if tokens[i].Type == "LOOP_START" {
+					if tokens[i].Type == TK_LOOP_START {
 						paren++
-					} else if tokens[i].Type == "LOOP_END" {
+					} else if tokens[i].Type == TK_LOOP_END {
 						paren--
 					}
 					if paren == 0 {
@@ -115,10 +127,10 @@ func run(tokens []Token) {
 			} else {
 				i++
 			}
-		case "OUTPUT":
+		case TK_OUTPUT:
 			fmt.Printf("%c", tape[pointer])
 			i++
-		case "INPUT":
+		case TK_INPUT:
 			var input uint8
 			fmt.Scanf("%c", &input)
 			tape[pointer] = input
