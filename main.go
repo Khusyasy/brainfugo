@@ -1,13 +1,33 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strings"
 )
 
 func main() {
-	var input []string = strings.Split("++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.", "")
-	tokens := lexer(input)
+	// read input file from args
+	if len(os.Args) < 2 {
+		fmt.Println("Please provide a file to read")
+		os.Exit(1)
+	}
+	file, err := os.Open(os.Args[1])
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		os.Exit(1)
+	}
+	defer file.Close()
+
+	// read file into string
+	var input string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		input += scanner.Text()
+	}
+
+	tokens := lexer(strings.Split(input, ""))
 	run(tokens)
 }
 
