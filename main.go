@@ -8,29 +8,51 @@ import (
 )
 
 func main() {
-	// read input file from args
 	if len(os.Args) < 2 {
-		fmt.Println("Please provide a file to read")
+		usage()
 		os.Exit(1)
 	}
-	file, err := os.Open(os.Args[1])
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		os.Exit(1)
-	}
-	defer file.Close()
 
-	// read file into string
 	var input string
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		input += scanner.Text()
+
+	if os.Args[1] == "run" {
+		if len(os.Args) < 3 {
+			fmt.Println("Please provide a file to read")
+			os.Exit(1)
+		}
+		file, err := os.Open(os.Args[2])
+		if err != nil {
+			fmt.Println("Error opening file:", err)
+			os.Exit(1)
+		}
+		defer file.Close()
+		scanner := bufio.NewScanner(file)
+		for scanner.Scan() {
+			input += scanner.Text()
+		}
+	}else if os.Args[1] == "str" {
+		if len(os.Args) < 3 {
+			fmt.Println("Please provide a string to read")
+			os.Exit(1)
+		}
+		input = os.Args[2]
+	}else {
+		usage()
+		os.Exit(1)
 	}
 
 	tokens := lexer(strings.Split(input, ""))
 	run(tokens)
 }
 
+func usage() {
+	fmt.Println("Usage:")
+	fmt.Println("\tbrainfuck [run|str] [input]")
+	fmt.Println("\tbrainfuck run [file]")
+	fmt.Println("\t\tRuns the brainfuck program from the given file")
+	fmt.Println("\tbrainfuck str [string]")
+	fmt.Println("\t\tRuns the brainfuck program from the given string")
+}
 
 type TokenType int
 const (
