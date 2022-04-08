@@ -1,3 +1,3 @@
-module khusyasy/brainf
+module khusyasy/bf
 
 go 1.17

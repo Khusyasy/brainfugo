@@ -9,7 +9,7 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		usage()
+		usage(os.Args[0])
 		os.Exit(1)
 	}
 
@@ -37,7 +37,7 @@ func main() {
 		}
 		input = os.Args[2]
 	}else {
-		usage()
+		usage(os.Args[0])
 		os.Exit(1)
 	}
 
@@ -45,13 +45,12 @@ func main() {
 	run(tokens)
 }
 
-func usage() {
-	fmt.Println("Usage:")
-	fmt.Println("\tbrainfuck [run|str] [input]")
-	fmt.Println("\tbrainfuck run [file]")
-	fmt.Println("\t\tRuns the brainfuck program from the given file")
-	fmt.Println("\tbrainfuck str [string]")
-	fmt.Println("\t\tRuns the brainfuck program from the given string")
+func usage(name string) {
+	fmt.Printf("%s [run|str] [input]\n", name)
+	fmt.Printf("  %s run [file]\n", name)
+	fmt.Printf("    Runs the brainfuck program from the given file\n")
+	fmt.Printf("  %s str [string]\n", name)
+	fmt.Printf("    Runs the brainfuck program from the given string\n")
 }
 
 type TokenType int
