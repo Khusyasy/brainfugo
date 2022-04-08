@@ -2,13 +2,21 @@
 Brainfuck interpreter written in Go.
 
 ## usage
-using the run subcommand
+
+### using the run subcommand
 ```
 bf.exe run [file]
 ```
-using the str subcommand
+```
+bf.exe run ./examples/hello.bf
+```
+
+### using the str subcommand
 ```
 bf.exe str [string]
+```
+```
+bf.exe str "++++[>++++[>++++<-]<-]>>+."
 ```
 
 ## build
