@@ -98,6 +98,10 @@ func run(tokens []Token) {
 				paren++
 				for {
 					i++
+					if i >= len(tokens) {
+						fmt.Println("Loop end not found")
+						os.Exit(1)
+					}
 					if tokens[i].Type == TK_LOOP_START {
 						paren++
 					} else if tokens[i].Type == TK_LOOP_END {
@@ -115,6 +119,10 @@ func run(tokens []Token) {
 				paren--
 				for {
 					i--
+					if i < 0 {
+						fmt.Println("Loop start not found")
+						os.Exit(1)
+					}
 					if tokens[i].Type == TK_LOOP_START {
 						paren++
 					} else if tokens[i].Type == TK_LOOP_END {
